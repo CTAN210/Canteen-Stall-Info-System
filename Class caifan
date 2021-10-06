@@ -1,0 +1,221 @@
+class caifan:
+
+    def __init__(self):
+        pass
+
+    def open_caifan():
+        global current_geometry, homepage1  # defines global
+        current_geometry = '600x800+' + str(homepage1.winfo_rootx()) + '+' + str(
+            homepage1.winfo_rooty() - 23)  # rechecks position of current window
+        homepage1.destroy()
+        caifan.open_menu()  # calls class open menu function
+
+    def back():  # back button returns to homepage
+        global current_geometry  # defines global
+        current_geometry = '600x800+' + str(caifan1.winfo_rootx()) + '+' + str(
+            caifan1.winfo_rooty() - 23)  # rechecks position of current window
+        caifan1.destroy()
+        homepage.open_menu()  # calls class open menu function
+
+    def queue_time():
+        global queuetime  # allow for destruction
+        global cb_length
+        global button_length
+
+        date_geometry = '200x70+' + str(caifan1.winfo_rootx() + 300) + '+' + str(caifan1.winfo_rooty() + 113)
+
+        try:
+            queuetime.deiconify()
+        except:
+            queuetime = Tk()
+
+        queuetime.lift()
+
+        queuetime.title("Select No. of People")
+
+        queuetime.configure(background="lightsteelblue4")
+        queuetime.geometry(date_geometry)
+        queuetime.resizable(width=False, height=False)
+
+        length = (
+        "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20")
+        cb_length = ttk.Combobox(queuetime, values=length, width=2)
+        cb_length.place(relx=0.2, rely=0.3, anchor='center')
+
+        button_length = Button(queuetime, text="Enter", height=2, width=12, command=caifan.get_length)
+        button_length.place(relx=0.65, rely=0.35, anchor='center')
+
+    def get_length():
+
+        time_length_str = cb_length.get()
+        print(time_length_str)
+
+        expected_time = int(time_length_str) * 2.5
+        expected_time_str = "Expected waiting time: " + str(expected_time) + " min"
+
+        time = Label(queuetime, text=expected_time_str, fg="black", bg="lightsteelblue4", font="Helvetica 12 bold")
+        time.place(relx=0.5, rely=0.8, anchor='center')
+
+    def open_menu():  # generates the whole menu
+
+        global caifan1, wallpaper, clock_label
+
+        caifan1 = Tk()
+        caifan1.title("Vegetarian")
+        caifan1.configure(background="lightsteelblue4")
+        caifan1.geometry(current_geometry)  # creates window at position of homepage
+        caifan1.resizable(width=False, height=False)
+
+        df_caifan = pd.read_excel('Economical Rice Stall Menu.xlsx').to_dict()
+
+        print(df_caifan)
+
+        count = 1
+
+        Label(caifan1, text="Economic Rice", fg="white", bg="lightsteelblue4", font="Times 37 bold").grid(
+            row=count, column=1, columnspan=20)
+
+        count += 1
+        Label(caifan1, text="_" * 100, bg="lightsteelblue4", fg="white").grid(row=count, columnspan=10)
+
+        count += 1
+        Label(caifan1, text="  Menu", fg="white", bg="lightsteelblue4", font="Times 25 bold").grid(row=count,
+                                                                                                       column=1,
+                                                                                                       sticky=W)
+        Button(caifan1, text="Waiting Time", fg="black", bg="lightsteelblue4", font="Times 25 bold",
+               command=caifan.queue_time).grid(row=count, column=5, sticky=W)
+        count += 1
+
+        Label(caifan1, text="_" * 100, bg="lightsteelblue4", fg="white").grid(row=count, columnspan=10)
+        count += 1
+
+        count_left, count_right = count, count
+
+        # left
+        for i in range(len(df_caifan['Food'])):
+
+            try:
+                Label(caifan1, text=df_caifan['Food'][i], fg="white", bg="lightsteelblue4",
+                      font="Times 17").grid(row=count_left, column=1, sticky=W)
+                Label(vegetarian1, text=df_vegetarian['Price'][i], fg="white", bg="lightsteelblue4",
+                      font="Times 15").grid(row=count_left, column=3, sticky=W)
+
+                count_left += 1
+
+            except:
+                print("NIL")
+
+        # right
+
+        for i in range(len(df_caifan['Food'])):
+
+            try:
+                Label(caifan1, text=df_caifan['Food2'][i], fg="white", bg="lightsteelblue4",
+                      font="Times 15").grid(row=count_right, column=5, sticky=W)
+                Label(caifan1, text=df_caifan['Price2'][i], fg="white", bg="lightsteelblue4",
+                      font="Times 15").grid(row=count_right, column=8, sticky=E)
+
+                count_right += 1
+
+            except:
+                print("NIL")
+
+        for i in range(10, count - 5):
+            Label(caifan1, text=" " * 15, fg="white", bg="lightsteelblue4", font="Times 5").grid(row=i + 4,
+                                                                                                     column=4)
+            Label(caifan1, text=" " * 15, fg="white", bg="lightsteelblue4", font="Times 5").grid(row=i + 4,
+                                                                                                     column=2)
+            Label(caifan1, text=" " * 15, fg="white", bg="lightsteelblue4", font="Times 5").grid(row=i + 4,
+                                                                                                     column=6)
+
+        Label(caifan1, text="_" * 100, bg="lightsteelblue4", fg="white").grid(row=count, columnspan=10)
+        count += 1
+
+        Button(caifan1, text="Back", bg="black", fg="black", height=2, width=10, font="helvetica 30 normal",
+               command=caifan.back).grid(row=count, column=5)
+        Button(caifan1, text="Price Calculator", bg="black", fg="black", height=2, width=10, font="helvetica 30 normal",
+               command=caifan.price_calculator).grid(row=count, column=1)
+
+    def price_calculator():
+        global current_geometry, caifan2, combomeat, combofish, combovege # defines global
+        current_geometry = '600x800+' + str(caifan1.winfo_rootx()) + '+' + str(
+            caifan1.winfo_rooty() - 23)  # rechecks position of current window
+        caifan1.destroy()
+
+        caifan2 = Tk()
+        caifan2.geometry(current_geometry)  # creates window at position of homepage
+        caifan2.resizable(width=False, height=False)
+        caifan2.configure(background="lightsteelblue4")
+        caifan2.title("Price Calculator")
+
+        count = 1
+
+        Label(caifan2, text="Economic Rice", fg="white", bg="lightsteelblue4", font="Times 37 bold").grid(row=count,
+                                                                                                         column=1,
+                                                                                                         columnspan=20)
+
+        count += 1
+        Label(caifan2, text="_" * 100, bg="lightsteelblue4", fg="white").grid(row=count, columnspan=10)
+
+        count += 1
+        Label(caifan2, text=" Price Calculator", fg="white", bg="lightsteelblue4", font="Times 25 bold").grid(row=count,
+                                                                                                           column=1,
+                                                                                                           sticky=W)
+        count += 1
+
+        Label(caifan2, text="_" * 100, bg="lightsteelblue4", fg="white").grid(row=count, columnspan=10)
+        count += 1
+
+        Label(caifan2, text= "Meat", fg="white", bg="lightsteelblue4", font="Times 20 bold").grid(row=count, column=3, sticky=W))
+        no_of_meat = (0, 1, 2, 3, 4, 5, 6)
+        combomeat = ttk.Combobox(caifan2, values= no_of_meat, width=5)
+        combomeat.grid(row=count, column= 4)
+        count += 1
+
+        Label(caifan2, text="Fish", fg="white", bg="lightsteelblue4", font="Times 20 bold").grid(row=count, column=3, sticky=W))
+        no_of_fish = (0, 1, 2, 3)
+        combofish = ttk.Combobox(caifan2, values=no_of_fish, width=5)
+        combofish.grid(row=count, column=4)
+        count += 1
+
+        Label(caifan2, text="Vegetable/Egg", fg="white", bg="lightsteelblue4", font="Times 20 bold").grid(row=count, column=3, sticky=W))
+        no_of_vege = (0, 1, 2, 3, 4, 5, 6)
+        combovege = ttk.Combobox(caifan2, values=no_of_vege, width=5)
+        combovege.grid(row=count, column=4)
+        count += 1
+
+        count_left, count_right = count, count
+
+
+
+        button1 = Button(caifan2, text="Calculate", font= 'Times 15' height=2, width=12, command=caifan.cost_function)
+        button1.place(relx=0.5, rely=0.6, relwidth = 0.15, relheight = 0.1)
+
+    def cost_function():
+        costmeat = combomeat.get()
+        print(costmeat)
+        meat = int(costmeat) * 1
+        print(meat)
+
+        costfish = combofish.get()
+        print(costfish)
+        fish = int(costfish) * 1.5
+        print(fish)
+
+        # fish = int(costfish) * 1.5
+        # vege
+        costvege = combovege.get()
+        print(costvege)
+        vege = int(costvege) * 0.70
+        print(vege)
+
+        total_cost = vege + meat + fish
+
+        Label(caifan2, text="Expected Damage: ", fg="white", bg="lightsteelblue4", font="Times 20 bold").place(relx= 0.3 , rely=0.71)
+        Label(text=total_cost, font="Times 15").place(relx=0.55, rely=0.71)
+
+
+
+
+
+

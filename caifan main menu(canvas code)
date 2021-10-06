@@ -1,0 +1,65 @@
+caifan1 = Tk()
+caifan1.title('Economic rice')
+        #caifan1.resizable(width=False, height=False)
+caifan1_background = ImageTk.PhotoImage(Image.open("C:\\Users\\chua_\\Downloads\\economic_rice_wallpaper_600x800.png"))
+        # get the width and height of the image
+        #w = caifan_background.width()
+        #h = caifan_background.height()
+        # size the window so the image will fill it
+caifan1.geometry("%dx%d+50+30" % (600, 800))
+cv = Canvas(caifan1, width=600, height=800)
+cv.pack(side='top', fill='both', expand='yes')
+cv.create_image(0, 0, image= caifan1_background, anchor='nw')
+
+x_top_axis = 295
+y_top_axis = 30
+
+cv.create_text(x_top_axis, y_top_axis, text="Economic Rice", fill="white", anchor='center', font = "Times 30 bold", width = 500)
+y_top_axis += 40
+
+cv.create_line(15, y_top_axis, 580, y_top_axis, width = 2, fill="white")
+y_top_axis += 25
+
+cv.create_text(70, y_top_axis, text= "Menu", fill='white', anchor='center', font="Times 20 bold", width = 250)
+y_top_axis += 30
+
+cv.create_line(15, y_top_axis, 580, y_top_axis, width = 2, fill="white")
+y_top_axis += 30
+
+y_left_axis, y_right_axis = y_top_axis, y_top_axis
+
+df_caifan1 = pd.read_excel('Economical Rice Stall Menu.xlsx').to_dict()  # creates dic from excel content
+
+print(df_caifan1)
+
+for i in range(len(df_caifan1['Food'])):
+
+    try:
+        cv.create_text(10, y_left_axis, text=df_caifan1['Food'][i], fill= "white", anchor= 'w', font="Times 16")
+        cv.create_text(280, y_left_axis, text=df_caifan1['Price'][i], fill="white", anchor= 'e', font="Times 14")
+
+        y_left_axis += 50
+
+    except:
+        print("NIL")
+
+for i in range(len(df_caifan1['Food'])):
+
+    try:
+        cv.create_text(325, y_right_axis, text=df_caifan1['Food2'][i], fill="white", anchor= 'w', font="Times 16")
+        cv.create_text(585, y_right_axis, text=df_caifan1['Price2'][i], fill="white", anchor= 'e', font="Times 14")
+
+        y_right_axis += 50
+
+    except:
+        print("NIL")
+
+cv.create_line(15, y_right_axis, 580, y_right_axis, width = 2, fill='white')
+#add command
+button_price_calc = Button(cv, text="Price Calculator", bg="white",fg="black", height=2, width=20,font="helvetica 15 normal")
+button_price_calc.grid(column= 0, columnspan= 2, padx= 0, row= 2, rowspan=2, pady= 620)
+#add command
+button_back = Button(cv, text="Back", bg="white",fg="black", height=2, width=20,font="helvetica 15 normal")
+button_back.grid(column= 1, columnspan= 2, padx= 350, row= 2, rowspan=2, pady=620)
+
+caifan1.mainloop()

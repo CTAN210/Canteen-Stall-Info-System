@@ -1,0 +1,93 @@
+from tkinter import *
+from tkinter import ttk
+from datetime import *
+from PIL import ImageTk
+from PIL import Image
+import pandas as pd
+from textwrap import *
+from time import strftime
+import time
+
+caifan2 = Tk()
+caifan2.title('Economic rice')
+                # caifan2.resizable(width=False, height=False)
+caifan2_background = ImageTk.PhotoImage(Image.open("C:\\Users\\chua_\\Downloads\\economic_rice_wallpaper_600x800.png"))
+                # get the width and height of the image
+                # w = caifan_background.width()
+                # h = caifan_background.height()
+                # size the window so the image will fill it
+caifan2.geometry("%dx%d+50+30" % (600, 800))
+cv2 = Canvas(caifan2, width=600, height=800)
+cv2.pack(side='top', fill='both', expand='yes')
+cv2.create_image(0, 0, image=caifan2_background, anchor='nw')
+
+x_top_axis = 295
+y_top_axis = 30
+
+cv2.create_text(x_top_axis, y_top_axis, text="Economic Rice", fill="white", anchor='center',
+                                font="Times 30 bold", width=500)
+y_top_axis += 40
+
+cv2.create_line(15, y_top_axis, 580, y_top_axis, width=2, fill="white")
+y_top_axis += 25
+
+cv2.create_text(120, y_top_axis, text="Price Calculator", fill='white', anchor='center', font="Times 20 bold",
+                                width=250)
+y_top_axis += 30
+
+cv2.create_line(15, y_top_axis, 580, y_top_axis, width=2, fill="white")
+y_top_axis += 50
+        #meat
+cv2.create_text(250, y_top_axis, text = "Meat", fill='white', anchor='center', font="Times 20", width=250)
+y_top_axis +=90
+
+no_of_meat= (0, 1, 2, 3, 4, 5, 6)
+combomeat = ttk.Combobox(cv2, values=no_of_meat, width =5 )
+combomeat.grid (column= 0, columnspan= 2, padx= 300, row= 2, rowspan=2, pady= 165)
+        #fish
+cv2.create_text(250, y_top_axis, text = "Fish", fill='white', anchor='center', font="Times 20", width=250)
+y_top_axis +=95
+
+no_of_fish= (0, 1, 2, 3)
+combofish = ttk.Combobox(cv2, values=no_of_fish, width =5 )
+combofish.grid (column= 0, columnspan= 2, padx= 300, row= 3, rowspan=2, pady= 0)
+        #vegetables
+cv2.create_text(190, y_top_axis, text = "Vegetables/Egg", fill='white', anchor='center', font="Times 20", width=250)
+y_top_axis +=90
+
+no_of_vege= (0, 1, 2, 3, 4, 5, 6)
+combovege = ttk.Combobox(cv2, values=no_of_vege, width =5 )
+combovege.grid (column= 0, columnspan= 2, padx= 300, row= 4, rowspan=2, pady= 0)
+
+
+#calculating user input into cost
+def cost_function():
+    costmeat = combomeat.get()
+    print(costmeat)
+    meat = int(costmeat) * 1
+    print(meat)
+
+    costfish = combofish.get()
+    print(costfish)
+    fish = int(costfish) * 1.5
+    print(fish)
+
+    # fish = int(costfish) * 1.5
+    # vege
+    costvege = combovege.get()
+    print(costvege)
+    vege= int(costvege) * 0.70
+    print(vege)
+
+    total_cost= vege + meat + fish
+
+    cv2.create_text(x_top_axis - 60, y_top_axis + 60, text="Expected Damage", fill="white", anchor='center',
+                    font="Times 15 bold", width=300)
+    label2 = Label(text= total_cost , font = "Times 15")
+    label2.place(relx=0.55, rely= 0.71)
+
+
+
+button = Button(cv2, text = "Calculate", font= 'Times 15', command = cost_function)
+button.place(relx = 0.5, rely = 0.6, relwidth = 0.15, relheight = 0.1)
+caifan2.mainloop()
